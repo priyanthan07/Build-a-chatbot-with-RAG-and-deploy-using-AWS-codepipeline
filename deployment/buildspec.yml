@@ -1,0 +1,39 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Login in to AWS ECR
+      - aws --version
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REPO_URI
+      - |
+        if [ "$ENV_TYPE" = "prod" ]; then
+          REPOSITORY_URI=$REPOSITORY_URI_PROD
+        else
+          REPOSITORY_URI=$REPOSITORY_URI_DEV
+        fi
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+  
+  build:
+    commands:
+      - echo docker build started......
+      - docker -v
+      - docker build -f Dockerfile -t $REPOSITORY_URI:latest --build-arg OPENAI_API_KEY=$OPENAI_API_KEY --build-arg ENV_TYPE=$ENV_TYPE .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+
+  post_build:
+    commands:
+      - echo Pushing to ECR ...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - DOCKER_CONTAINER_NAME=hirednow-ml-api-web
+      - printf '[{"name":"%s","imageUri":"%s"}]' $DOCKER_CONTAINER_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - echo $DOCKER_CONTAINER_NAME
+      - echo printing imagedefinitions.json
+      - cat imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
+    - dist/*

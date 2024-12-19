@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: combined_app
+    ports:
+      - "8501:8501" 
+      - "8000:8000" 
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ENV_TYPE=${ENV_TYPE}
+
+    env_file:
+      - .env
+
+    networks:
+      - app_network
+
+networks:
+  app_network:

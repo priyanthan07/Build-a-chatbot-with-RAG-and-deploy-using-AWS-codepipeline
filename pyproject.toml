@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "ragchatbot"
+version = "0.1.0"
+description = ""
+authors = ["priyanthan"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+openai = "^1.57.4"
+python-dotenv = "^1.0.1"
+llama-index = "^0.12.5"
+fastapi = "^0.115.6"
+pydantic = "^2.10.3"
+uvicorn = "^0.34.0"
+llama-index-embeddings-huggingface = "^0.4.0"
+streamlit = "^1.41.1"
+requests = "^2.32.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
