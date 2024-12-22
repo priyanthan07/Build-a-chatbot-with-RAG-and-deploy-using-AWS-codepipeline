@@ -8,7 +8,12 @@ import os
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
+app = FastAPI(
+    title="chatbot-rag",
+    description="This API provides chat functionalities for the chatbot.",
+    version="1.0.0",
+    swagger_ui_parameters={"displayRequestDuration": True},
+)
 
 app.include_router(rag_router)
 
