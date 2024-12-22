@@ -8,7 +8,11 @@
 - Create ECS cluster
 - Create Task definistion
 - Create ECS service
+- Create target group
+- Create load balancer
+- Add rules
 - BUild code pipeline
 - Test chatbot
+
 
 Medium blog : 
