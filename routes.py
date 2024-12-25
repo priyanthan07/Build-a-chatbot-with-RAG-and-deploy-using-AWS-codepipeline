@@ -11,7 +11,7 @@ class userResponse(BaseModel):
 rag_engine = get_rag_engine()
 
 @router.post("/chat")
-async def evaluate(body: userResponse):
+async def chat_function(body: userResponse):
     try:
         response = chat(body.userInput, rag_engine)
         return {"code": 200, "message": "Response successfully generated.", "response": response, "metadata": {}}
